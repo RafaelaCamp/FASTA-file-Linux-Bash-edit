@@ -1,0 +1,31 @@
+# Merging fasta sequences in the same file
+
+# First, all fasta files of organisms or species must be within the same directory.
+# We will use cat followed by all fasta (*.fasta), >> files and the new folder name containing all fasta formats gathered.
+
+$cat *.fasta >> newnamefilefolder.txt
+
+# The result is a fast file with sequencing of the species separated by two spacings \n\n in RegEx:
+
+>NC_014612.1 Candida alai mitochondrion, complete genome\n
+AGTTTATATAATTTATATTTCACTATTTTATCTCCCTCAGGGGTATTAATCATCTCTTTTATAAAATTAT\n
+TATAAGAAGAAAGATATTTTTTATACTATTAAAAATATTAATATATCCTCCTAATATTATATAATTGATA\n
+\n
+>NC_018046.1 Candida albicans strain L757 mitochondrion, complete genome\n
+TTAGAAAAAAATAAGTGAAGACTTATATAAAGGAGAGGTAATTGAAAAACTAGAGATAGATAATAATATA\n
+TTAGTGTGGAACCAATAACTAATATCTATATAGACAAAGTAGAAAGGAGTAACCGATCTAAGCTAGAAAT\n
+
+# We can use the SED command to remove the spacing between the headers of a sequencing, and the sequencing of another organism, replacing \n\n with \n
+# -E for RegEx 
+# -z null
+
+$tail newnamefilefolder.txt | sed -E -z 's/\n\n/\n/g'
+
+# And the output will be:
+
+>NC_014612.1 Candida alai mitochondrion, complete genome\n
+AGTTTATATAATTTATATTTCACTATTTTATCTCCCTCAGGGGTATTAATCATCTCTTTTATAAAATTAT\n
+TATAAGAAGAAAGATATTTTTTATACTATTAAAAATATTAATATATCCTCCTAATATTATATAATTGATA\n
+>NC_018046.1 Candida albicans strain L757 mitochondrion, complete genome\n
+TTAGAAAAAAATAAGTGAAGACTTATATAAAGGAGAGGTAATTGAAAAACTAGAGATAGATAATAATATA\n
+TTAGTGTGGAACCAATAACTAATATCTATATAGACAAAGTAGAAAGGAGTAACCGATCTAAGCTAGAAAT\n
